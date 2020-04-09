@@ -1,4 +1,5 @@
-﻿using MyShop.Core.Models;
+﻿using MyShop.Core.Contracts;
+using MyShop.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,21 +9,24 @@ using System.Threading.Tasks;
 
 namespace MyShop.DataAccess.InMemory
 {
-    public class InMemoryRepository<T> where T : BaseEntity
+    public class InMemoryRepository<T> : IRepository<T> where T : BaseEntity
     {
         ObjectCache cache = MemoryCache.Default;
         List<T> items;
         string className;
 
-        public InMemoryRepository() {
+        public InMemoryRepository()
+        {
             className = typeof(T).Name;
             items = cache[className] as List<T>;
-            if (items == null) {
+            if (items == null)
+            {
                 items = new List<T>();
             }
         }
 
-        public void Commit() {
+        public void Commit()
+        {
             cache[className] = items;
         }
 
@@ -38,7 +42,8 @@ namespace MyShop.DataAccess.InMemory
             {
                 tToUpdate = t;
             }
-            else {
+            else
+            {
                 throw new Exception(className + " Not Found");
             }
         }
